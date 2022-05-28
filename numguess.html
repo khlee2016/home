@@ -1,0 +1,44 @@
+
+<HTML>
+<head>
+<script type="text/javascript">
+// Define variables
+var num;
+var turns;
+
+function checkNumber() {
+
+    var num = Math.floor(Math.random() * 100) + 1;
+    var turns = 10;
+    
+    while (turns > 0) {
+      guess=prompt("Tell me your guess. 1 - 100 ", "Your guess: ");
+      alert(guess);
+            if ( guess == null ) {
+                break;
+            }
+            else if (guess == num) {
+                alert("Congratulations, you won! The number was " + num + ".");
+                break;
+            } else if (guess < num) {
+                turns--;
+                alert("Your guess was too low. Turns remaining: " + turns);
+            } else if (guess > num) {
+                turns--;
+                 alert("Your guess was too high. Turns remaining: " + turns);
+            }
+    }
+    if (turns==0)
+      alert ("You failed to guess.");
+}
+
+</script>
+</head>
+<body>
+<h1>숫자 맞추기 게임</h1>
+<p>1부터 100 사이의 숫자 맞추기</p>
+<form id="Input" name="Input">
+    <input onclick="checkNumber()" type="button" value="시작">
+</form>
+</body>
+</html>
