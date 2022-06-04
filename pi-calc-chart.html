@@ -1,6 +1,6 @@
 <HTML><HEAD>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style> div { position: relative; width:30vw; margin: auto } </style>
+<style> div { position: relative; width:80vw; margin: auto } </style>
 </HEAD><BODY>
 <div><canvas id="myChart"></canvas></div>
 <script>
@@ -16,16 +16,21 @@
   };
   const config = {
     type: 'line',
-    data: datainfo, options: {}
+    data: datainfo,
+    options: {}
   };
 </script>
 <script>
   const myChart = new Chart(
-      document.getElementById('myChart'), config
+      document.getElementById('myChart'),
+      config
   ); 
-  k = 0;   dl = datainfo.labels; dd = datainfo.datasets[0].data
+  k = 0;
+  dl = datainfo.labels;
+  dd = datainfo.datasets[0].data
   for ( i=1 ; i<=100000000 ; i++ ) {
-     x = Math.random();   y = Math.random()
+     x = Math.random();
+     y = Math.random()
      if ( (x*x + y*y) <= 1 ) k++
      if ( i == 10 ) { redraw(i) }
      if ( i == 100 ) { redraw(i) }
@@ -38,6 +43,9 @@
      if ( (i % 10000000) == 0 ) console.log(i)
   }
   function redraw(t) {
-    dl.push(t); dd.push(4*k/t); myChart.update();
+    dl.push(t); dd.push(4*k/t);
+    myChart.update();
   }
-</script></BODY></HTML>
+</script>
+</BODY>
+</HTML>
