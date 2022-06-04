@@ -1,0 +1,260 @@
+<html>
+<head>
+<style>
+
+/* Global Styles */
+* {
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --Main-Background: #cccccc; //222222;
+  --Main-Color: ffffff;
+}
+
+body {
+  background-color: var(--Main-Background);
+  color: var(--Main-Color);
+  font-family: Arial, sans-serif;
+  padding: 3vh 4vw;
+}
+
+/* Main Styles */
+.header {
+  display: block;
+  font-family: sans-serif;
+}
+
+#title {
+  display: block;
+//  text-align: center;
+  font-size: 2em;
+  font-family: Arial;
+}
+
+#sub {
+  display: block;
+//  text-align: center;
+  color: #eee;
+  font-size: 1.5em;
+  margin: 1vh 0;
+  font-style: italic;
+  margin-bottom: 1vh;
+}
+
+#subTitle {
+  display: block;
+  font-size: 1em;
+  margin: 1vh 0;
+}
+
+#info {
+  display: block;
+  font-size: 0.8em;
+}
+
+#math {
+  display: block;
+  background-color: #333;
+  height: 1em;
+  padding: 1px 5px;
+  border: 2px solid #444;
+  margin: 0.8em 0;
+  text-align: center;
+  overflow: hidden; /* Edit for Codepen. */
+  /* overflow-x: scroll; - Disabled for Codepen. */
+}
+
+#canvas {
+  display: block;
+  border: 3px solid #eee;
+  background-color: var(--Main-Color);
+  margin: auto;
+  margin-top: 3vh !important;
+  margin-bottom: 3vh !important;
+}
+
+#pi {
+  padding-left: 1%;
+  text-align: left;
+}
+
+.controls {
+  display: block;//flex;
+  width: 35%;
+  height: 25px;
+  margin: 20px 0;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.controls button {
+  display: inline-block;
+  width: 100px;
+  padding: 0.2em 0.8em;
+  margin: 10px 10px;
+  background-color: inherit;
+  border: 1px solid; // var(--Main-Color);
+  //color: var(--Main-Color);
+  font-size: 1.5em;
+  outline: none;
+ }
+
+.controls button:hover {
+  display: inline-block;
+  font-style: italic;
+  text-decoration: underline;
+}
+
+.controls button:active {
+  display: inline-block;
+  background-color: var(--Main-Color);
+  color: var(--Main-Background);
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h3 id="title">Calculating Pi (3.14)</h3>
+    <p id="sub">Using the Monte Carlo Method.</p>
+  </div>
+  <div class="main" style="float:left;">
+    <canvas id="canvas"></canvas>
+  </div>
+  <div style="float:left;margin:100px;font-size:2em">
+        <span>Points Inside:</span> : <span id="inside">0</span><br>
+        <span>Points Outside:</span> : <span id="outside">0</span><br>
+        <span>Total Points:</span> : <span id="total">0</span><br>
+        <span>Value of Pi</span> : <br><span id="pi">0</span>
+  </div>
+  <br>
+  <div class="controls"">
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <button id="reset">Reset</button>
+  </div>
+</div>
+
+<script>
+window.onload = function() {
+  var d = document;
+  var canvas = d.getElementById("canvas");
+  var c = canvas.getContext("2d");
+
+  canvas.width = 500;
+  canvas.height = 500;
+
+  var main = {
+    w: canvas.width,
+    h: canvas.height
+  };
+
+  var elements = {
+    pIn: d.getElementById("inside"),
+    pOut: d.getElementById("outside"),
+    tPoints: d.getElementById("total"),
+    pi: d.getElementById("pi")
+  };
+
+  var circle = {
+    x: main.w / 2,
+    y: main.h / 2,
+    r: main.h / 2
+  };
+
+  var data = {
+    pIn: 0,
+    pOut: 0,
+    pTotal: 0,
+    pi: 0
+  };
+
+  var content = {
+    run: false
+  };
+
+  c.beginPath();
+  c.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2, false);
+  c.stroke();
+
+  function draw() {
+    for (let i = 0; i < 100; i++) {
+      let x = Math.floor(Math.random() * (main.h - 0 + 1)) + 0;
+      let y = Math.floor(Math.random() * (main.h - 0 + 1)) + 0;
+
+      if (
+        Math.sqrt(
+          (x - circle.x) * (x - circle.x) + (y - circle.y) * (y - circle.y)
+        ) <= circle.r
+      ) {
+        data.pIn++;
+        elements.pIn.innerHTML = data.pIn;
+        c.fillStyle = "Red";
+      } else {
+        data.pOut++;
+        elements.pOut.innerHTML = data.pOut;
+        c.fillStyle = "Yellow";
+      }
+
+      data.pTotal++;
+      elements.tPoints.innerHTML = data.pTotal;
+
+      data.pi = 4 * (data.pIn / data.pTotal);
+      elements.pi.innerHTML = data.pi;
+
+      c.fillRect(x, y, 1, 1);
+    }
+
+    if (content.run === true) {
+      requestAnimationFrame(draw);
+    }
+  }
+
+  function start() {
+    reset();
+    content.run = true;
+    draw();
+  }
+
+  function reset() {
+    content.run = false;
+    data.pIn = 0;
+    data.pOut = 0;
+    data.pTotal = 0;
+    data.pi = 0;
+
+    c.clearRect(0, 0, main.w, main.h);
+    c.beginPath();
+    c.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2, false);
+    c.stroke();
+
+    d.getElementById("start").style.display = "inline";
+    elements.pIn.innerHTML = data.pIn;
+    elements.pOut.innerHTML = data.pOut;
+    elements.tPoints.innerHTML = data.pTotal;
+    elements.pi.innerHTML = data.pi;
+  }
+
+  d.getElementById("start").onclick = function() {
+    reset();
+    start();
+  };
+
+  d.getElementById("stop").onclick = function() {
+    content.run = false;
+  };
+
+  d.getElementById("reset").onclick = function() {
+    reset();
+    setTimeout(function() {
+      reset();
+    }, 1);
+  };
+};
+
+</script>
+</body>
+</html>
