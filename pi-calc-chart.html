@@ -42,7 +42,7 @@
      if ( i == 1000000 ) { redraw(i) }
      if ( i == 10000000 ) { redraw(i) }
      if ( i == 100000000 ) { redraw(i)}
-     if ( (i % 10000000) == 0 ) console.log(i)
+     if ( (i % 10000000) == 0 ) console.log(i, 4*k/i)
   }
   function redraw(t) {
     dl.push(t); dd.push(4*k/t);
